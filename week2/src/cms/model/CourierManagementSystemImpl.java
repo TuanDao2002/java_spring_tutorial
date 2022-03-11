@@ -63,9 +63,9 @@ public class CourierManagementSystemImpl implements CourierManagementSystem {
                 if (vehicle.getOdometerReading() + distance > vehicle.getLastServicePoint() + vehicle.getServiceInterval()) {
                     return false;
                 } else {
-                    scheduledJobList.add(newJob);
                     newJob.finalizeJobDetail(vehicle.getWearAndTears(distance));
                     vehicle.setOdometerReading(vehicle.getOdometerReading() + distance);
+                    scheduledJobList.add(newJob);
                     return true;
                 }
             }
