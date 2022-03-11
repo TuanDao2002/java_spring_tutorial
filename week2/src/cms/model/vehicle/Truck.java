@@ -2,25 +2,21 @@ package cms.model.vehicle;
 
 public class Truck extends Vehicle{
     private int capacity;
-    final static int RATE_PER_TON = 50;
 
     public Truck(String regNum, String make, String model, int year, double odometerReading, double serviceInterval, int capacity) {
         super(regNum, make, model, year, odometerReading, serviceInterval);
         this.capacity = capacity;
+        super.setFlatRate(0.5);
     }
 
     public int getCapacity() {
         return capacity;
     }
 
-    @Override
-    public int getFlatRate() {
-        return RATE_PER_TON * getCapacity();
-    }
 
     @Override
     public double getWearAndTears(double distance) {
-        return (this.getFlatRate() * distance) / 100;
+        return super.getWearAndTears(distance) * capacity;
     }
 
     @Override

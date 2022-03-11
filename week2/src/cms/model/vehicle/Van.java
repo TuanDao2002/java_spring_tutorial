@@ -1,20 +1,10 @@
 package cms.model.vehicle;
 
 public class Van extends Vehicle{
-    final static int FLAT_RATE = 60;
 
     public Van(String regNum, String make, String model, int year, double odometerReading, double serviceInterval) {
         super(regNum, make, model, year, odometerReading, serviceInterval);
-    }
-
-    @Override
-    public int getFlatRate() {
-        return FLAT_RATE;
-    }
-
-    @Override
-    public double getWearAndTears(double distance) {
-        return (this.getFlatRate() * distance) / 100;
+        super.setFlatRate(0.6);
     }
 
     @Override

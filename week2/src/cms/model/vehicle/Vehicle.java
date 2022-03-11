@@ -8,6 +8,7 @@ public abstract class Vehicle {
     private double odometerReading;
     private double lastServicePoint;
     private double serviceInterval;
+    private double flatRate;
 
     public Vehicle(String regNum, String make, String model, int year, double odometerReading, double serviceInterval) {
         this.regNum = regNum;
@@ -56,13 +57,17 @@ public abstract class Vehicle {
         this.lastServicePoint = lastServicePoint;
     }
 
-    public void setServiceInterval(double serviceInterval) {
-        this.serviceInterval = serviceInterval;
+    public void setFlatRate(double flatRate) {
+        this.flatRate = flatRate;
     }
 
-    public abstract int getFlatRate();
+    public double getFlatRate() {
+        return flatRate;
+    }
 
-    public abstract double getWearAndTears(double distance);
+    public double getWearAndTears(double distance) {
+        return flatRate * distance;
+    }
 
     @Override
     public abstract String toString();

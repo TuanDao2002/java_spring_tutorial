@@ -16,18 +16,22 @@ public class CourierManagementSystemImpl implements CourierManagementSystem {
 
     @Override
     public void addVehicle(Vehicle vehicle) {
+        if (vehicleList.contains(vehicle)) {
+            return;
+        }
         vehicleList.add(vehicle);
     }
 
     @Override
     public void displayVehicleInfo(String regNum) {
-
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getRegNum().equals(regNum)) {
                 System.out.println(vehicle);
-                break;
+                return;
             }
         }
+
+        System.out.println("No vehicle with the registration with ID: " + regNum);
     }
 
     @Override
@@ -42,28 +46,32 @@ public class CourierManagementSystemImpl implements CourierManagementSystem {
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getRegNum().equals(regNum)) {
                 vehicle.setLastServicePoint(vehicle.getOdometerReading());
-                break;
+                return;
             }
         }
+
+        System.out.println("No vehicle with the registration with ID: " + regNum);
     }
 
     @Override
     public boolean scheduleJob(double distance, String regNum) {
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getRegNum().equals(regNum)) {
-                Job newJob = new Job(count, distance, vehicle);
+                Job newJob = new Job(count, distance, regNum);
                 count++;
 
-                if (newJob.isServiceable()) {
-                    scheduledJobList.add(newJob);
-                    return true;
-                } else {
+                if (vehicle.getOdometerReading() + distance > vehicle.getLastServicePoint() + vehicle.getServiceInterval()) {
                     return false;
+                } else {
+                    scheduledJobList.add(newJob);
+                    newJob.finalizeJobDetail(vehicle.getWearAndTears(distance));
+                    vehicle.setOdometerReading(vehicle.getOdometerReading() + distance);
+                    return true;
                 }
             }
         }
 
-        System.out.println("Cannot find vehicle");
+        System.out.println("No vehicle with the registration with ID: " + regNum);
         return false;
     }
 

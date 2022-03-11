@@ -1,19 +1,16 @@
 package cms.model;
-
-import cms.model.vehicle.Vehicle;
-
 public class Job {
     private int jobID;
     private double distance;
-    private Vehicle vehicle;
-    private double expense;
+    private String registrationID;
+    private double wearAndTearExpense;
     private double profit;
-    private final static int PROFIT_MARGIN = 50;
+    private double cost;
 
-    public Job(int jobID, double distance, Vehicle vehicle) {
+    public Job(int jobID, double distance, String registrationID) {
         this.jobID = jobID;
         this.distance = distance;
-        this.vehicle = vehicle;
+        this.registrationID = registrationID;
     }
 
     public int getJobID() {
@@ -25,31 +22,25 @@ public class Job {
     }
 
     public double getExpense() {
-        return expense;
+        return wearAndTearExpense;
     }
 
     public double getProfit() {
         return profit;
     }
 
-    public boolean isServiceable() {
-        double odometerReading = vehicle.getOdometerReading();
-        double lastServicePoint = vehicle.getLastServicePoint();
-        double serviceInterval = vehicle.getServiceInterval();
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
 
-        if (serviceInterval - odometerReading + lastServicePoint < distance) {
-            return false;
-        }
-
-        vehicle.setOdometerReading(odometerReading + distance);
-        this.expense = vehicle.getWearAndTears(distance);
-        this.profit = (this.expense * PROFIT_MARGIN) / 100;
-        return true;
+    public void finalizeJobDetail(double wearAndTearExpense) {
+        this.wearAndTearExpense = wearAndTearExpense;
+        this.setCost(this.wearAndTearExpense * 1.5);
+        this.profit = this.cost - this.wearAndTearExpense;
     }
 
     @Override
     public String toString() {
-        double cost = getExpense() + getProfit();
         return String.format("ID: %d, Distance: %.2fkm, Cost: $%.2f, Expense: $%.2f, Profit: $%.2f",
                 getJobID(), getDistance(), cost, getExpense(), getProfit());
     }
