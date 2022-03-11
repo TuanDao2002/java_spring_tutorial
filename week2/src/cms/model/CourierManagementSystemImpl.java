@@ -54,6 +54,7 @@ public class CourierManagementSystemImpl implements CourierManagementSystem {
     }
 
     @Override
+    // should belong only to the system not the Job class
     public boolean scheduleJob(double distance, String regNum) {
         for (Vehicle vehicle : vehicleList) {
             if (vehicle.getRegNum().equals(regNum)) {
