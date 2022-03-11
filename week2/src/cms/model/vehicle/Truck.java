@@ -19,6 +19,11 @@ public class Truck extends Vehicle{
     }
 
     @Override
+    public double getWearAndTears(double distance) {
+        return (this.getFlatRate() * distance) / 100;
+    }
+
+    @Override
     public String toString() {
         return String.format("Truck: Reg_Number: %s, Make: %s, Model: %s, Year: %d, Capacity: %dt\n" +
                         "Service History: Odometer: %.2fkm, Last Service: %.2fkm, Service interval: %.2fkm",

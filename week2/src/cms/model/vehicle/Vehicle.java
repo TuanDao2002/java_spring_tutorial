@@ -62,6 +62,8 @@ public abstract class Vehicle {
 
     public abstract int getFlatRate();
 
+    public abstract double getWearAndTears(double distance);
+
     @Override
     public abstract String toString();
 

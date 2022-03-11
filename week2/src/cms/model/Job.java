@@ -42,7 +42,7 @@ public class Job {
         }
 
         vehicle.setOdometerReading(odometerReading + distance);
-        this.expense = (vehicle.getFlatRate() * distance) / 100;
+        this.expense = vehicle.getWearAndTears(distance);
         this.profit = (this.expense * PROFIT_MARGIN) / 100;
         return true;
     }
