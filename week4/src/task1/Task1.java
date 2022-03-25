@@ -23,15 +23,22 @@ public class Task1 {
         System.out.println("\nDisplay with forEach: ");
 //        hashSet.forEach(object -> System.out.println(object));
         hashSet.forEach(System.out::println); // the same as above
+        System.out.println();
 
-        String[] stringArr = {"hello", "hello", "world", "bye", "world"};
-        Set<String> hashSetString = new HashSet<>(List.of(stringArr));
-        List<String> duplicates = new ArrayList<>(List.of(stringArr));
+        String[] stringArr = {"hello", "hello", "good", "morning", "good", "good"};
+        Set<String> hashSetString = new HashSet<>();
+        List<String> duplicates = new ArrayList<>();
+
+        for (String str : stringArr) {
+            if (!hashSetString.add(str)) {
+                System.out.println("Duplicate detected: " + str);
+                if (!duplicates.contains(str)) duplicates.add(str);
+            }
+        }
 
         System.out.println("\nStrings in the set: ");
-        for (String stringObj : hashSetString) {
-            duplicates.remove(stringObj); // the remaining elements are duplicates
-            System.out.println(stringObj);
+        for (String str : hashSetString) {
+            System.out.println(str);
         }
 
         System.out.println("\nDuplicate strings: ");
