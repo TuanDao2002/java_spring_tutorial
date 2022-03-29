@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+       xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation = "http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!--    create an instance of MessageService (FacebookService) to inject to ChatApplication-->
+    <!--    use scope "prototype" so that there can be many instances of a single bean "FacebookService"-->
+    <bean id="facebookService" class="com.cosc2440.week5.service.FacebookService" scope="prototype"/>
+
+    <!--    create other instances of MessageService to inject to ChatApplication-->
+    <bean id="smsService" class="com.cosc2440.week5.service.SMSService"/>
+    <!--    <bean id="hangoutService" class="com.cosc2440.week5.service.HangoutService"/>-->
+
+    
+    <!--    the ref in property must match with the id of the injected bean-->
+    <bean id="chatApplication" class="com.cosc2440.week5.ChatApplication">
+    <!--        inject one of 3 instances of MessageService:-->
+            <property name="messageService" ref="facebookService"/>
+    <!--        <property name="messageService" ref="smsService"/>-->
+    <!--        <property name="messageService" ref="hangoutService"/>-->
+        
+    </bean>
+</beans>
