@@ -14,7 +14,9 @@
 
     
     <!--    the ref in property must match with the id of the injected bean-->
-    <bean id="chatApplication" class="com.cosc2440.week5.ChatApplication">
+    <!--    the name in property must match with the attribute in ChatApplication class-->
+    <!--    have scope "prototype" to be able to add parameter when initialize ChatApplication bean-->
+    <bean id="chatApplication" class="com.cosc2440.week5.ChatApplication" scope="prototype">
     <!--        inject one of 3 instances of MessageService:-->
             <property name="messageService" ref="facebookService"/>
     <!--        <property name="messageService" ref="smsService"/>-->
