@@ -18,6 +18,11 @@ public class ChatApplication {
 
     public ChatApplication(){}
 
+    public ChatApplication(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    // must have constructor to auto wire the MessageService instance
     public ChatApplication(ArrayList<MessageService> messageServiceArrayList) {
         this.messageServiceArrayList = messageServiceArrayList;
     }
