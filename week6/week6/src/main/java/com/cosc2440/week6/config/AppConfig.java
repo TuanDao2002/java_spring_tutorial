@@ -1,7 +1,9 @@
 package com.cosc2440.week6.config;
 
 import com.cosc2440.week6.entity.Person;
+import com.cosc2440.week6.service.CourseService;
 import com.cosc2440.week6.service.PersonService;
+import com.cosc2440.week6.service.StudentService;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,12 @@ public class AppConfig {
     public PersonService personService() {
         return new PersonService();
     }
+
+    @Bean
+    public StudentService studentService() { return new StudentService(); }
+
+    @Bean
+    public CourseService courseService() { return new CourseService(); }
 
     @Bean
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
