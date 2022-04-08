@@ -12,8 +12,8 @@ public class Course {
     @Column
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
     public void setId(int id) {

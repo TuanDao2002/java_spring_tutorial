@@ -20,6 +20,7 @@ public class Week6Application {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
+		/*
 		PersonService personService = context.getBean(PersonService.class);
 
 		// test save
@@ -85,7 +86,7 @@ public class Week6Application {
 		personService.update(person3);
 		System.out.println(personService.getAll());
 
-		/*
+		*/
 		StudentService studentService = context.getBean(StudentService.class);
 		CourseService courseService = context.getBean(CourseService.class);
 
@@ -140,7 +141,7 @@ public class Week6Application {
 
 		System.out.println("All courses in the database after delete student1:");
 		System.out.println(courses);
-		*/
+
 	}
 
 }

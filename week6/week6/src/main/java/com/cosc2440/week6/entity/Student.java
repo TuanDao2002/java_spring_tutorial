@@ -17,6 +17,7 @@ public class Student {
     @Column
     private String name;
 
+    // fetch type eager will load the course list immediately, while lazy will only load when get course list is called
     @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     // have to use List as ArrayList is not supported by hibernate
