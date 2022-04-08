@@ -35,6 +35,14 @@ public class PersonService {
     }
 
     public void update(Person person) {
+        Person retrievePerson = getPersonById(person.getId());
+        if (retrievePerson == null) {
+            System.out.println("This person does not exist");
+            return;
+        }
+
+        // evict after getPersonById to check for null
+        sessionFactory.getCurrentSession().evict(retrievePerson);
         sessionFactory.getCurrentSession().update(person);
     }
 

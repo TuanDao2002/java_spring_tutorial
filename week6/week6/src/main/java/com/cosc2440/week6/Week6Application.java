@@ -80,6 +80,11 @@ public class Week6Application {
 			System.out.println(p);
 		}
 
+		// test update
+		person3.setName("new khatun");
+		personService.update(person3);
+		System.out.println(personService.getAll());
+
 		/*
 		StudentService studentService = context.getBean(StudentService.class);
 		CourseService courseService = context.getBean(CourseService.class);
