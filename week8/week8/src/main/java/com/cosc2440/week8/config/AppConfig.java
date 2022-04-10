@@ -1,5 +1,7 @@
 package com.cosc2440.week8.config;
 
+import com.cosc2440.week8.model.Answer;
+import com.cosc2440.week8.model.Question;
 import com.cosc2440.week8.model.Student;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,10 +23,21 @@ import java.util.Properties;
 @EnableWebMvc // enable WebMvc to perform crud from Postman API
 public class AppConfig {
     // does not include controller or service in AppConfig
-    @Bean
-    public Student student() {
-        return new Student();
-    }
+    // may not need to create Bean for objects
+//    @Bean
+//    public Student student() {
+//        return new Student();
+//    }
+
+//    @Bean
+//    public Question question() {
+//        return new Question();
+//    }
+//
+//    @Bean
+//    public Answer answer() {
+//        return new Answer();
+//    }
 
     @Bean
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {

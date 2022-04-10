@@ -3,24 +3,31 @@ package com.cosc2440.week8.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "student")
-public class Student {
+@Table(name = "school")
+public class School {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
     private String name;
 
-    public Student(){}
+    public School(){}
 
-    // create getters for all attributes, so they can be returned to client side
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
