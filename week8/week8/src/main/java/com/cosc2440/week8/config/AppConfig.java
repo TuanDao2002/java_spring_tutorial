@@ -20,6 +20,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableWebMvc // enable WebMvc to perform crud from Postman API
 public class AppConfig {
+    // does not include controller or service in AppConfig
     @Bean
     public Student student() {
         return new Student();
