@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<items>
+   <item>
+     <product>
+        <description>128GB USB</description>
+        <price>59.95</price>
+     </product>
+     <quantity>5</quantity>
+   </item>
+   <item>
+     <product>
+        <description>64GB USB</description>
+        <price>29.95</price>
+     </product>
+     <quantity>10</quantity>
+   </item>
+   <item>
+     <product>
+        <description>32GB USB</description>
+        <price>14.95</price>
+     </product>
+     <quantity>20</quantity>
+   </item>
+</items>
