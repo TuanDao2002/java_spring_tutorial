@@ -1,11 +1,11 @@
 package cosc2440.practice.courseManagementSystem.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "course")
@@ -13,6 +13,7 @@ public class Course {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // id should always be integer
     private int cid;
 
     @Column(nullable = false)
@@ -21,16 +22,17 @@ public class Course {
     @Column(nullable = false)
     private int credit;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER) // fetch type is eager so Registration list can be returned to client side
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
-    private List<CourseRegistration> registrationList;
+    @JsonIgnoreProperties(value = "course") // Registration list only shows Student objects here
+    private Set<CourseRegistration> registrationList;
 
     public Course(){}
 
     public Course(int cid, String name) {
         this.cid = cid;
         this.name = name;
-        registrationList = new ArrayList<>();
+        registrationList = new HashSet<>();
     }
 
     public int getCid() {
@@ -57,7 +59,12 @@ public class Course {
         this.credit = credit;
     }
 
-    public List<CourseRegistration> getRegistrationList() {
+    public void setRegistrationList(Set<CourseRegistration> registrationList) {
+        this.registrationList = registrationList;
+    }
+
+    public Set<CourseRegistration> getRegistrationList() {
         return registrationList;
     }
+
 }

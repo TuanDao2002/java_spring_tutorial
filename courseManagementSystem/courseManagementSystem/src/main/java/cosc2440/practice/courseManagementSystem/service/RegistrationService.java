@@ -36,6 +36,10 @@ public class RegistrationService {
         }
 
         CourseRegistration registration = new CourseRegistration(retrieveStudent, retrieveCourse);
+        if (retrieveStudent.getRegistrationList().contains(registration) || retrieveCourse.getRegistrationList().contains(registration)) {
+            return "This registration already exists!!!";
+        }
+
         sessionFactory.getCurrentSession().save(registration);
         return "Registration with ID: " + registration.getRid() + " is added!!!";
     }
@@ -45,7 +49,7 @@ public class RegistrationService {
         return criteria.list();
     }
 
-    public CourseRegistration getOne(String rid) {
+    public CourseRegistration getOne(int rid) {
         return sessionFactory.getCurrentSession().get(CourseRegistration.class, rid);
     }
 
@@ -54,9 +58,18 @@ public class RegistrationService {
         return "Registration with ID: " + CourseRegistration.getRid() + " is updated!!!";
     }
 
-    public String delete(String rid) {
+    public String delete(int rid) {
          CourseRegistration registration = getOne(rid);
         if (registration != null) {
+            // delete registration from the enrolled course
+            Course enrolledCourse = registration.getCourse();
+            enrolledCourse.getRegistrationList().remove(registration);
+
+            // delete registration from the enrolled student
+            Student enrolledStudent = registration.getStudent();
+            enrolledStudent.getRegistrationList().remove(registration);
+
+            // delete CourseRegistration object from database
             sessionFactory.getCurrentSession().evict(registration);
             sessionFactory.getCurrentSession().delete(registration);
             return "Registration with ID: " + registration .getRid() + " is deleted!!!";

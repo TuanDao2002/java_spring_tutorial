@@ -1,13 +1,12 @@
 package cosc2440.practice.courseManagementSystem.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.OptBoolean;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "student")
@@ -17,26 +16,28 @@ public class Student {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // id should always be integer
     private int sid;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    // set a time zone to prevent offset datetime
+    // set a local time zone to prevent offset datetime
     @JsonFormat(pattern = datePattern, lenient = OptBoolean.FALSE, timezone = "Asia/Ho_Chi_Minh")
     private Date birthdate;
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER) // fetch type is eager so Registration list can be returned to client side
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private List<CourseRegistration> registrationList;
+    @JsonIgnoreProperties(value = "student") // Registration list only shows Course objects here
+    private Set<CourseRegistration> registrationList;
 
     public Student() {}
 
     public Student(String name, Date birthdate) {
         this.name = name;
         this.birthdate = birthdate;
-        registrationList = new ArrayList<>();
+        registrationList = new HashSet<>();
     }
 
     public int getSid() {
@@ -63,7 +64,11 @@ public class Student {
         this.birthdate = birthdate;
     }
 
-    public List<CourseRegistration> getRegistrationList() {
+    public void setRegistrationList(Set<CourseRegistration> registrationList) {
+        this.registrationList = registrationList;
+    }
+
+    public Set<CourseRegistration> getRegistrationList() {
         return registrationList;
     }
 }

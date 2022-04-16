@@ -30,7 +30,7 @@ public class AppConfig {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.put("hibernate.show_sql", true);
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
+        properties.put("hibernate.hbm2ddl.auto", "create");
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         //To use postgresql

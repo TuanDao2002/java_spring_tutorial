@@ -1,6 +1,9 @@
 package cosc2440.practice.courseManagementSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "courseRegistration")
@@ -8,12 +11,15 @@ public class CourseRegistration {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String rid;
+    // id should always be integer
+    private int rid;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = "registrationList") // ignore only the registration list of Student object
     private Student student;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = "registrationList") // ignore only the registration list of Course object
     private Course course;
 
     public CourseRegistration(){}
@@ -23,11 +29,11 @@ public class CourseRegistration {
         this.course = course;
     }
 
-    public String getRid() {
+    public int getRid() {
         return rid;
     }
 
-    public void setRid(String rid) {
+    public void setRid(int rid) {
         this.rid = rid;
     }
 
@@ -45,5 +51,20 @@ public class CourseRegistration {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+
+    // override equals and hashCode but only with Student and Course attributes to prevent duplicate Registration
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CourseRegistration that = (CourseRegistration) o;
+        return student.equals(that.student) && course.equals(that.course);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(student, course);
     }
 }

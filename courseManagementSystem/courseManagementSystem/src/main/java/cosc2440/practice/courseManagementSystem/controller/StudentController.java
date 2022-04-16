@@ -17,6 +17,7 @@ public class StudentController {
         return studentService.add(student);
     }
 
+    // handle exception when date input has invalid format
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public String invalidDateFormat() {
         return "Invalid date format, must follow MM/dd/yyyy";
@@ -34,6 +35,7 @@ public class StudentController {
 
     @RequestMapping(path = "/students/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable("id") int sid) {
+        System.out.println(sid + 1);
         return studentService.delete(sid);
     }
 }

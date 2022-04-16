@@ -1,6 +1,7 @@
 package cosc2440.practice.courseManagementSystem.service;
 
 import cosc2440.practice.courseManagementSystem.model.Course;
+import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,24 @@ public class CourseService {
     }
 
     public String delete(int cid) {
+        // delete Course object in many-to-many relationship
         Course retrieveCourse = getOne(cid);
         if (retrieveCourse != null) {
+            for (CourseRegistration registration : retrieveCourse.getRegistrationList()) {
+                // delete all registrations in database
+                sessionFactory.getCurrentSession().delete(registration);
+
+                // delete all registrations in the List of each Student object
+                registration.getStudent().getRegistrationList().remove(registration);
+            }
+
+            // delete all registrations in the List of Course object
+            retrieveCourse.getRegistrationList().clear();
+
+            // evict the Course object from database
             sessionFactory.getCurrentSession().evict(retrieveCourse);
+
+            // delete the Course object
             sessionFactory.getCurrentSession().delete(retrieveCourse);
             return "Course with ID: " + retrieveCourse.getCid() + " is deleted!!!";
         }
