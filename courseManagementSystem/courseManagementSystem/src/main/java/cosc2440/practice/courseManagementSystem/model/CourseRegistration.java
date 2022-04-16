@@ -1,7 +1,5 @@
 package cosc2440.practice.courseManagementSystem.model;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 
 @Entity
@@ -13,16 +11,17 @@ public class CourseRegistration {
     private String rid;
 
     @ManyToOne
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "course_id")
     private Course course;
 
     public CourseRegistration(){}
+
+    public CourseRegistration(Student student, Course course) {
+        this.student = student;
+        this.course = course;
+    }
 
     public String getRid() {
         return rid;

@@ -15,15 +15,14 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
-    private int id;
+    @Column(nullable = false)
+    private int credit;
 
-    @OneToMany(mappedBy = "course")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     private List<CourseRegistration> registrationList;
 
     public Course(){}
@@ -50,12 +49,12 @@ public class Course {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
+    public int getCredit() {
+        return credit;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCredit(int credit) {
+        this.credit = credit;
     }
 
     public List<CourseRegistration> getRegistrationList() {

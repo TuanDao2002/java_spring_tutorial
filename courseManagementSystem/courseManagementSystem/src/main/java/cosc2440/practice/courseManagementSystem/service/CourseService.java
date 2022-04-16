@@ -29,7 +29,7 @@ public class CourseService {
         return criteria.list();
     }
 
-    public Course getOne(String cid) {
+    public Course getOne(int cid) {
         return sessionFactory.getCurrentSession().get(Course.class, cid);
     }
 
@@ -38,7 +38,7 @@ public class CourseService {
         return "Course with ID: " + Course.getCid() + " is updated!!!";
     }
 
-    public String delete(String cid) {
+    public String delete(int cid) {
         Course retrieveCourse = getOne(cid);
         if (retrieveCourse != null) {
             sessionFactory.getCurrentSession().evict(retrieveCourse);

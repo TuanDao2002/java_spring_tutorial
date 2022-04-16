@@ -1,6 +1,8 @@
 package cosc2440.practice.courseManagementSystem.service;
 
+import cosc2440.practice.courseManagementSystem.model.Course;
 import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
+import cosc2440.practice.courseManagementSystem.model.Student;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,23 @@ public class RegistrationService {
         this.sessionFactory = sessionFactory;
     }
 
-    public String add(CourseRegistration CourseRegistration) {
-        sessionFactory.getCurrentSession().save(CourseRegistration);
-        return "Registration with ID: " + CourseRegistration.getRid() + " is added!!!";
+    public String add(int studentID, int courseID) {
+        StudentService studentService = new StudentService();
+        CourseService courseService = new CourseService();
+
+        Student retrieveStudent = sessionFactory.getCurrentSession().get(Student.class, studentID);
+        if (retrieveStudent == null) {
+            return "Student with ID: " + studentID + " does not exist!!!";
+        }
+
+        Course retrieveCourse = sessionFactory.getCurrentSession().get(Course.class, courseID);
+        if (retrieveCourse == null) {
+            return "Course with ID: " + courseID + " does not exist!!!";
+        }
+
+        CourseRegistration registration = new CourseRegistration(retrieveStudent, retrieveCourse);
+        sessionFactory.getCurrentSession().save(registration);
+        return "Registration with ID: " + registration.getRid() + " is added!!!";
     }
 
     public List<CourseRegistration> getAll() {

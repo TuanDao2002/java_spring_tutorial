@@ -1,8 +1,8 @@
 package cosc2440.practice.courseManagementSystem.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import org.hibernate.annotations.Cascade;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,24 +12,24 @@ import java.util.List;
 @Entity
 @Table(name = "student")
 public class Student {
+    private static final String datePattern = "MM/dd/yyyy";
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sid;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Column(nullable = false)
+    // set a time zone to prevent offset datetime
+    @JsonFormat(pattern = datePattern, lenient = OptBoolean.FALSE, timezone = "Asia/Ho_Chi_Minh")
     private Date birthdate;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JsonIgnore
     private List<CourseRegistration> registrationList;
-
 
     public Student() {}
 

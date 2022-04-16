@@ -29,7 +29,7 @@ public class StudentService {
         return criteria.list();
     }
 
-    public Student getOne(String sid) {
+    public Student getOne(int sid) {
         return sessionFactory.getCurrentSession().get(Student.class, sid);
     }
 
@@ -38,7 +38,7 @@ public class StudentService {
         return "Student with ID: " + student.getSid() + " is updated!!!";
     }
 
-    public String delete(String sid) {
+    public String delete(int sid) {
         Student retrieveStudent = getOne(sid);
         if (retrieveStudent != null) {
             sessionFactory.getCurrentSession().evict(retrieveStudent);
