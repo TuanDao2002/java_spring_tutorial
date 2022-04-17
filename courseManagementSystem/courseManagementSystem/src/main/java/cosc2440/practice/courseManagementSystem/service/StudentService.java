@@ -4,10 +4,13 @@ import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
 import cosc2440.practice.courseManagementSystem.model.Student;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,8 +28,14 @@ public class StudentService {
         return "Student with ID: " + student.getSid() + " is added!!!";
     }
 
-    public List<Student> getAll() {
+    public List<Student> getAll(String name, Date birthdate) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Student.class);
+
+        // return Student objects with name matched anywhere using Restrictions.like (alternate for "LIKE" in SQL)
+        if (name != null) criteria.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
+
+        // return Student objects with birthdate matched using Restrictions.eq (alternate for "=" in SQL)
+        if (birthdate != null) criteria.add(Restrictions.eq("birthdate", birthdate));
 
         // set this to prevent duplicate records when the results are sent back to client side
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
