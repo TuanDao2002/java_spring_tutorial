@@ -1,10 +1,12 @@
 package cosc2440.practice.courseManagementSystem.service;
 
+import cosc2440.practice.courseManagementSystem.model.Course;
 import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
 import cosc2440.practice.courseManagementSystem.model.Student;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,19 +30,41 @@ public class StudentService {
         return "Student with ID: " + student.getSid() + " is added!!!";
     }
 
-    public List<Student> getAll(String name, Date birthdate) {
+    public List<Student> getAll(String name, Date startdate, Date endDate) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Student.class);
 
         // return Student objects with name matched anywhere using Restrictions.like (alternate for "LIKE" in SQL)
         if (name != null) criteria.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
 
-        // return Student objects with birthdate matched using Restrictions.eq (alternate for "=" in SQL)
-        if (birthdate != null) criteria.add(Restrictions.eq("birthdate", birthdate));
+        // return Student objects with birthdate greater than or equal using Restrictions.ge (alternate for ">=" in SQL)
+        if (startdate != null) criteria.add(Restrictions.ge("birthdate", startdate));
+
+        // return Student objects with birthdate less than or equal using Restrictions.le (alternate for "<=" in SQL)
+        if (endDate != null) criteria.add(Restrictions.le("birthdate", endDate));
 
         // set this to prevent duplicate records when the results are sent back to client side
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
+
+    public List<Student> getAllStudent(int courseID) {
+        Course retrieveCourse = sessionFactory.getCurrentSession().get(Course.class, courseID);
+        if (retrieveCourse == null) {
+            System.out.println("Course with ID: " + courseID + " does not exist!!!");
+            return null;
+        }
+
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CourseRegistration.class);
+
+        // only return column "student" from registrations
+        criteria.setProjection(Projections.property("student"));
+
+        // only return registrations that has the required course
+        criteria.add(Restrictions.eq("course", retrieveCourse));
+
+        return criteria.list();
+    }
+
 
     public Student getOne(int sid) {
         return sessionFactory.getCurrentSession().get(Student.class, sid);

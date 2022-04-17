@@ -2,9 +2,10 @@ package cosc2440.practice.courseManagementSystem.service;
 
 import cosc2440.practice.courseManagementSystem.model.Course;
 import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
-import cosc2440.practice.courseManagementSystem.model.Student;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,19 @@ public class CourseService {
         return "Course with ID: " + course.getCid() + " is added!!!";
     }
 
-    public List<Course> getAll() {
+    public List<Course> getAll(String name, Integer minCredit, Integer maxCredit) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Course.class);
+
+        // return Course objects with name matched anywhere using Restrictions.like (alternate for "LIKE" in SQL)
+        if (name != null) criteria.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
+
+        // return Course objects with credit greater than or equal minCredit using Restrictions.ge (alternate for ">=" in SQL)
+        // Note: greater than operation e.g. ">" using Restrictions.gt
+        if (minCredit != null) criteria.add(Restrictions.ge("credit", minCredit));
+
+        // return Course objects with credit less than or equal maxCredit using Restrictions.le (alternate for "<=" in SQL)
+        // Note: less than operation e.g. "<" using Restrictions.lt
+        if (maxCredit != null) criteria.add(Restrictions.le("credit", maxCredit));
 
         // set this to prevent duplicate records when the results are sent back to client side
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

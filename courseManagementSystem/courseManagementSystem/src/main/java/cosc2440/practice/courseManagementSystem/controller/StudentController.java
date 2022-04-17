@@ -1,7 +1,6 @@
 package cosc2440.practice.courseManagementSystem.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.OptBoolean;
 import cosc2440.practice.courseManagementSystem.model.Student;
 import cosc2440.practice.courseManagementSystem.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,15 @@ public class StudentController {
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.GET)
-    public List<Student> getALl(@RequestParam(value = "name", required = false) String name,
-                                @RequestParam(value = "birthdate", required = false)
-                                @JsonFormat(pattern = datePattern, timezone = "Asia/Ho_Chi_Minh") Date birthdate) {
-        return studentService.getAll(name, birthdate);
+    public List<Student> getAll(@RequestParam(value = "name", required = false) String name,
+                                @RequestParam(value = "startDate", required = false) @JsonFormat(pattern = datePattern, timezone = "Asia/Ho_Chi_Minh") Date startDate,
+                                @RequestParam(value = "endDate", required = false) @JsonFormat(pattern = datePattern, timezone = "Asia/Ho_Chi_Minh") Date endDate) {
+        return studentService.getAll(name, startDate, endDate);
+    }
+
+    @RequestMapping(path = "/students_in_course/{cid}", method = RequestMethod.GET)
+    public List<Student> getAllStudentsByCourseID(@PathVariable("cid") int cid) {
+        return studentService.getAllStudent(cid);
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.PUT)
@@ -43,7 +47,6 @@ public class StudentController {
 
     @RequestMapping(path = "/students/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable("id") int sid) {
-        System.out.println(sid + 1);
         return studentService.delete(sid);
     }
 }

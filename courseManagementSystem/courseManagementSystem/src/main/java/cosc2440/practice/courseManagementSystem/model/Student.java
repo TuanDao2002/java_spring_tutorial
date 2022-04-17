@@ -24,6 +24,7 @@ public class Student {
 
     @Column(nullable = false)
     // set a local time zone to prevent offset datetime
+    // set lenient to be false to prevent a day before error
     @JsonFormat(pattern = datePattern, lenient = OptBoolean.FALSE, timezone = "Asia/Ho_Chi_Minh")
     private Date birthdate;
 

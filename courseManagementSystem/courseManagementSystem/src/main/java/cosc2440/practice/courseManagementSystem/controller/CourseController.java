@@ -18,8 +18,10 @@ public class CourseController {
     }
 
     @RequestMapping(path = "/courses", method = RequestMethod.GET)
-    public List<Course> getALl() {
-        return courseService.getAll();
+    public List<Course> getAll(@RequestParam(value = "name", required = false) String name,
+                               @RequestParam(value = "minCredit", required = false) Integer minCredit,
+                               @RequestParam(value = "maxCredit", required = false) Integer maxCredit) {
+        return courseService.getAll(name, minCredit, maxCredit);
     }
 
     @RequestMapping(path = "/courses", method = RequestMethod.PUT)
