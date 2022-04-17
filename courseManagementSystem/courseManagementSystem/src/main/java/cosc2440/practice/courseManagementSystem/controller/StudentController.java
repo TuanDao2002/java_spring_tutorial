@@ -31,7 +31,7 @@ public class StudentController {
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.GET)
-    List<Student> getAll(@RequestParam(value = "name", required = false) String name,
+    public List<Student> getAll(@RequestParam(value = "name", required = false) String name,
                          @RequestParam(value = "startDate", required = false) @JsonFormat(pattern = datePattern, timezone = "Asia/Ho_Chi_Minh") Date startDate,
                          @RequestParam(value = "endDate", required = false) @JsonFormat(pattern = datePattern, timezone = "Asia/Ho_Chi_Minh") Date endDate) {
         return studentService.getAll(name, startDate, endDate);
