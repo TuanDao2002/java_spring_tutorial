@@ -5,13 +5,12 @@ import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
 import cosc2440.practice.courseManagementSystem.model.Student;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,16 +50,36 @@ public class StudentService {
         Course retrieveCourse = sessionFactory.getCurrentSession().get(Course.class, courseID);
         if (retrieveCourse == null) {
             System.out.println("Course with ID: " + courseID + " does not exist!!!");
-            return null;
+            return new ArrayList<>();
         }
 
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CourseRegistration.class);
 
-        // only return column "student" from registrations
+        // create alias for Student object in CourseRegistration to access all of its columns individually
+        criteria.createAlias("student", "s");
+
+        /*
+        // this solution will not return JSON format
+        // only return column id and name of "student" from registrations
+        criteria.setProjection(Projections.projectionList()
+                .add(Projections.property("s.id"), "id")
+                .add(Projections.property("s.name"), "name")
+        );
+         */
+
+        // this is not included in the previous commented solution
+        // return the whole Student object but columns that are specified to be displayed are determined by View
         criteria.setProjection(Projections.property("student"));
 
         // only return registrations that has the required course
         criteria.add(Restrictions.eq("course", retrieveCourse));
+
+        // this sort will be executed first
+        // order the students by name in ascending order
+        criteria.addOrder(Order.asc("s.name"));
+
+        // order the students by id in descending order
+        criteria.addOrder(Order.desc("s.id"));
 
         return criteria.list();
     }
