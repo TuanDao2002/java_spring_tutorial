@@ -27,6 +27,9 @@ public class StudentService {
 
     public List<Student> getAll() {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Student.class);
+
+        // set this to prevent duplicate records when the results are sent back to client side
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
 
@@ -35,7 +38,17 @@ public class StudentService {
     }
 
     public String update(Student student) {
-        sessionFactory.getCurrentSession().saveOrUpdate(student);
+        Student retrieveStudent = getOne(student.getSid());
+        if (retrieveStudent == null) {
+            return "Student with ID: " + student.getSid() + " does not exist!!!";
+        }
+
+        // only allow to update name and birthdate from StudentService
+        if(student.getName() != null) retrieveStudent.setName(student.getName());
+        if(student.getBirthdate() != null) retrieveStudent.setBirthdate(student.getBirthdate());
+
+        // update on the retrieve Student object, so no need to evict()
+        sessionFactory.getCurrentSession().update(retrieveStudent);
         return "Student with ID: " + student.getSid() + " is updated!!!";
     }
 
@@ -54,10 +67,7 @@ public class StudentService {
             // delete all registrations in the List of Student object
             retrieveStudent.getRegistrationList().clear();
 
-            // evict the Student object from database
-            sessionFactory.getCurrentSession().evict(retrieveStudent);
-
-            // delete the Student object
+            // delete the retrieve Student object, so no need to evict()
             sessionFactory.getCurrentSession().delete(retrieveStudent);
             return "Student with ID: " + retrieveStudent.getSid() + " is deleted!!!";
         }

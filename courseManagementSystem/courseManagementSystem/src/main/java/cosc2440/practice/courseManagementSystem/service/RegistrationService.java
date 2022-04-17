@@ -53,11 +53,6 @@ public class RegistrationService {
         return sessionFactory.getCurrentSession().get(CourseRegistration.class, rid);
     }
 
-    public String update(CourseRegistration CourseRegistration) {
-        sessionFactory.getCurrentSession().saveOrUpdate(CourseRegistration);
-        return "Registration with ID: " + CourseRegistration.getRid() + " is updated!!!";
-    }
-
     public String delete(int rid) {
          CourseRegistration registration = getOne(rid);
         if (registration != null) {
@@ -69,8 +64,7 @@ public class RegistrationService {
             Student enrolledStudent = registration.getStudent();
             enrolledStudent.getRegistrationList().remove(registration);
 
-            // delete CourseRegistration object from database
-            sessionFactory.getCurrentSession().evict(registration);
+            // delete CourseRegistration object from database, no need to evict()
             sessionFactory.getCurrentSession().delete(registration);
             return "Registration with ID: " + registration .getRid() + " is deleted!!!";
         }

@@ -18,13 +18,8 @@ public class RegistrationController {
     }
 
     @RequestMapping(path = "/registrations", method = RequestMethod.GET)
-    public List<CourseRegistration> getALl() {
+    public List<CourseRegistration> getAll() {
         return registrationService.getAll();
-    }
-
-    @RequestMapping(path = "/registrations", method = RequestMethod.PUT)
-    public String update(@RequestBody CourseRegistration registration) {
-        return registrationService.update(registration);
     }
 
     @RequestMapping(path = "/registrations/{id}", method = RequestMethod.DELETE)

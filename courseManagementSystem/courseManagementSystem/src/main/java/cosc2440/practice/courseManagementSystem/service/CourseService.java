@@ -2,6 +2,7 @@ package cosc2440.practice.courseManagementSystem.service;
 
 import cosc2440.practice.courseManagementSystem.model.Course;
 import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
+import cosc2440.practice.courseManagementSystem.model.Student;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CourseService {
 
     public List<Course> getAll() {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Course.class);
+
+        // set this to prevent duplicate records when the results are sent back to client side
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
 
@@ -34,9 +38,19 @@ public class CourseService {
         return sessionFactory.getCurrentSession().get(Course.class, cid);
     }
 
-    public String update(Course Course) {
-        sessionFactory.getCurrentSession().saveOrUpdate(Course);
-        return "Course with ID: " + Course.getCid() + " is updated!!!";
+    public String update(Course course) {
+        Course retrieveCourse = getOne(course.getCid());
+        if (retrieveCourse == null) {
+            return "Course with ID: " + course.getCid() + " does not exist!!!";
+        }
+
+        // only allow to update name and credit from CourseService
+        if(course.getName() != null) retrieveCourse.setName(course.getName());
+        if(course.getCredit() != 0) retrieveCourse.setCredit(course.getCredit());
+
+        // update on the retrieve Course object, so no need to evict()
+        sessionFactory.getCurrentSession().update(retrieveCourse);
+        return "Course with ID: " + course.getCid() + " is updated!!!";
     }
 
     public String delete(int cid) {
@@ -54,10 +68,7 @@ public class CourseService {
             // delete all registrations in the List of Course object
             retrieveCourse.getRegistrationList().clear();
 
-            // evict the Course object from database
-            sessionFactory.getCurrentSession().evict(retrieveCourse);
-
-            // delete the Course object
+            // delete the retrieve Course object, so no need to evict()
             sessionFactory.getCurrentSession().delete(retrieveCourse);
             return "Course with ID: " + retrieveCourse.getCid() + " is deleted!!!";
         }
