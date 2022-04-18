@@ -75,10 +75,15 @@ public class CourseService {
 
                 // delete all registrations in the List of each Student object
                 registration.getStudent().getRegistrationList().remove(registration);
+
+                /* Can retrieve the Student from database and delete CourseRegistration from it
+                Student student = sessionFactory.getCurrentSession().get(Student.class, registration.getStudent().getSid());
+                student.getRegistrationList().remove(registration);
+                */
             }
 
-            // delete all registrations in the List of Course object
-            retrieveCourse.getRegistrationList().clear();
+            // does not need to use clear()
+//            retrieveCourse.getRegistrationList().clear();
 
             // delete the retrieve Course object, so no need to evict()
             sessionFactory.getCurrentSession().delete(retrieveCourse);

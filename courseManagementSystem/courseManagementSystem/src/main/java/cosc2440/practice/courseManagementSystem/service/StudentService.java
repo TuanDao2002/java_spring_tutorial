@@ -60,7 +60,7 @@ public class StudentService {
 
         /*
         // this solution will not return JSON format
-        // only return column id and name of "student" from registrations
+        // only return id and name of "student" from registrations in array format
         criteria.setProjection(Projections.projectionList()
                 .add(Projections.property("s.id"), "id")
                 .add(Projections.property("s.name"), "name")
@@ -112,12 +112,17 @@ public class StudentService {
                 // delete all registrations in database
                 sessionFactory.getCurrentSession().delete(registration);
 
-                // delete all registrations in the List of each Course object
+                // delete all registrations in the List of each POJO Course object
                 registration.getCourse().getRegistrationList().remove(registration);
+
+                /* Can retrieve the Course from database and delete CourseRegistration from it
+                Course course = sessionFactory.getCurrentSession().get(Course.class, registration.getCourse().getCid());
+                course.getRegistrationList().remove(registration);
+                */
             }
 
-            // delete all registrations in the List of Student object
-            retrieveStudent.getRegistrationList().clear();
+            // does not need to use clear()
+//            retrieveStudent.getRegistrationList().clear();
 
             // delete the retrieve Student object, so no need to evict()
             sessionFactory.getCurrentSession().delete(retrieveStudent);
