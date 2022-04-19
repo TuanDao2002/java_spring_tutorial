@@ -1,7 +1,6 @@
 package cosc2440.practice.courseManagementSystem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -12,8 +11,9 @@ public class CourseRegistration {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // id should always be integer
-    private int rid;
+    private Long rid;
 
+    // cannot use Cascade for join table in many-to-many relationship
     @ManyToOne
     @JsonIgnoreProperties(value = "registrationList") // ignore only the registration list of Student object
     private Student student;
@@ -29,11 +29,11 @@ public class CourseRegistration {
         this.course = course;
     }
 
-    public int getRid() {
+    public Long getRid() {
         return rid;
     }
 
-    public void setRid(int rid) {
+    public void setRid(Long rid) {
         this.rid = rid;
     }
 

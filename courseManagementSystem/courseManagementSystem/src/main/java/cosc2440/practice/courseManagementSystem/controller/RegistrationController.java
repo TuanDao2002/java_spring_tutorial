@@ -23,7 +23,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(path = "/registrations/{id}", method = RequestMethod.DELETE)
-    public String delete(@PathVariable("id") int rid) {
+    public String delete(@PathVariable("id") Long rid) {
         return registrationService.delete(rid);
     }
 }

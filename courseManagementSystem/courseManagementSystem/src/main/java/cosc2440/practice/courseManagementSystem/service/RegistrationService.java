@@ -3,7 +3,7 @@ package cosc2440.practice.courseManagementSystem.service;
 import cosc2440.practice.courseManagementSystem.model.Course;
 import cosc2440.practice.courseManagementSystem.model.CourseRegistration;
 import cosc2440.practice.courseManagementSystem.model.Student;
-import org.hibernate.Criteria;
+import cosc2440.practice.courseManagementSystem.repository.CourseRegistrationRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,18 @@ public class RegistrationService {
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private CourseRegistrationRepository repo;
+
+    public void setRepo(CourseRegistrationRepository repo) {
+        this.repo = repo;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     public String add(int studentID, int courseID) {
-        StudentService studentService = new StudentService();
-        CourseService courseService = new CourseService();
-
         Student retrieveStudent = sessionFactory.getCurrentSession().get(Student.class, studentID);
         if (retrieveStudent == null) {
             return "Student with ID: " + studentID + " does not exist!!!";
@@ -40,20 +44,19 @@ public class RegistrationService {
             return "This registration already exists!!!";
         }
 
-        sessionFactory.getCurrentSession().save(registration);
+        repo.save(registration); // using crudRepository
         return "Registration with ID: " + registration.getRid() + " is added!!!";
     }
 
     public List<CourseRegistration> getAll() {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CourseRegistration.class);
-        return criteria.list();
+        return repo.findAll(); // using crudRepository
     }
 
-    public CourseRegistration getOne(int rid) {
-        return sessionFactory.getCurrentSession().get(CourseRegistration.class, rid);
+    public CourseRegistration getOne(Long rid) {
+        return repo.findById(rid).orElse(null);
     }
 
-    public String delete(int rid) {
+    public String delete(Long rid) {
          CourseRegistration registration = getOne(rid);
         if (registration != null) {
             // delete registration from the enrolled course
@@ -64,8 +67,7 @@ public class RegistrationService {
             Student enrolledStudent = registration.getStudent();
             enrolledStudent.getRegistrationList().remove(registration);
 
-            // delete CourseRegistration object from database, no need to evict()
-            sessionFactory.getCurrentSession().delete(registration);
+            repo.delete(registration); // using crudRepository
             return "Registration with ID: " + registration .getRid() + " is deleted!!!";
         }
 
