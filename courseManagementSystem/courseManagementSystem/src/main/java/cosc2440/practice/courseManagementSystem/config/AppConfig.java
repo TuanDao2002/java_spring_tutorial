@@ -25,7 +25,7 @@ public class AppConfig {
         return tx;
     }
 
-    @Bean(name = "entityManagerFactory") // configure this to use crudRepository
+    @Bean
     public LocalSessionFactoryBean sessionFactoryBean() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
