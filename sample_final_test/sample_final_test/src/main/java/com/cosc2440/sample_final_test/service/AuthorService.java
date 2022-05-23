@@ -41,22 +41,22 @@ public class AuthorService {
     }
 
     public List<Author> search(String name, String credential, String order) {
-        List<Author> libraries;
+        List<Author> authors;
         if (order != null && order.equalsIgnoreCase("desc")) {
-            libraries = authorRepository.findAllByOrderByIdDesc();
+            authors = authorRepository.findAllByOrderByIdDesc();
         } else {
-            libraries = authorRepository.findAllByOrderByIdAsc();
+            authors = authorRepository.findAllByOrderByIdAsc();
         }
 
         if (name != null) {
-            libraries.removeIf(author -> !author.getName().equalsIgnoreCase(name));
+            authors.removeIf(author -> !author.getName().equalsIgnoreCase(name));
         }
 
         if (credential != null) {
-            libraries.removeIf(author -> !author.getCredential().equalsIgnoreCase(credential));
+            authors.removeIf(author -> !author.getCredential().equalsIgnoreCase(credential));
         }
 
-        return libraries;
+        return authors;
     }
 
     public List<Author> get(String name, String credential, String order) {

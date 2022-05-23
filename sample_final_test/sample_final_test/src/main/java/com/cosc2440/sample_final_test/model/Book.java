@@ -22,7 +22,7 @@ public class Book {
     @Column
     private Date createdDate;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorID", nullable = false)
     @JsonIgnoreProperties(value = "bookList")
     private Author author;
